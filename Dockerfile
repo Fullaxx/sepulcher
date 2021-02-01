@@ -20,8 +20,8 @@ ENV DEBIAN_FRONTEND noninteractive
 # ------------------------------------------------------------------------------
 # Install gnupg2,libraries and clean up
 RUN apt-get update && \
-	apt-get install -y --no-install-recommends \
-	  file gnupg2 libcurl3-gnutls libgcrypt20 ca-certificates && \
+	apt-get install -y --no-install-recommends file nano \
+	  gnupg2 libcurl3-gnutls libgcrypt20 ca-certificates && \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/* /var/tmp/* /tmp/*
 
