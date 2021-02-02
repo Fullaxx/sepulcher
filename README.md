@@ -55,7 +55,9 @@ CipherText Token: 2a077b723c44af935c28b3e8bd5aa1e4c2ccf54b6e7f19a229b9cb192261dc
 ```
 
 ## Step 4: Get and Decrypt a message
-Bob will use the CipherText Token he got from Alice to retrieve and decrypt the message.
+Bob will use the CipherText Token he got from Alice to retrieve and decrypt the message. \
+get_file.sh will use the CipherText Token provided to download the encrypted message. \
+Then it will decrypt your message and put the output in the filename you provide.
 ```
 # get_file.sh 2a077b723c44af935c28b3e8bd5aa1e4c2ccf54b6e7f19a229b9cb192261dc3327f1a8bc31886e944f4c02087daec87365b150f96c4ad0ed22556f317e6390b2 my_msg.txt
 ```
