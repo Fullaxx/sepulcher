@@ -20,16 +20,16 @@ fi
 NAME="$1"
 
 if [ ! -d ${NAME} ]; then
-  echo "${NAME} does not exist!"
+  bail "${NAME} does not exist!"
 fi
 
 CERT="${NAME}/public.crt"
 if [ ! -f ${CERT} ]; then
-  echo "${CERT} does not exist!"
+  bail "${CERT} does not exist!"
 fi
 
 if [ ! -r ${CERT} ]; then
-  echo "${CERT} is not readable!"
+  bail "${CERT} is not readable!"
 fi
 
 # View the Certificate
