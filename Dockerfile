@@ -18,25 +18,25 @@ MAINTAINER Brett Kuskie <fullaxx@gmail.com>
 ENV DEBIAN_FRONTEND noninteractive
 
 # ------------------------------------------------------------------------------
-# Install gnupg2,libraries and clean up
+# Install openssl,libraries and clean up
 RUN apt-get update && \
-	apt-get install -y --no-install-recommends file nano \
-	  gnupg2 libcurl3-gnutls libgcrypt20 ca-certificates && \
+	apt-get install -y --no-install-recommends file nano openssl \
+	  libcurl3-gnutls libgcrypt20 ca-certificates && \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/* /var/tmp/* /tmp/*
 
 # ------------------------------------------------------------------------------
-# Prevent warnings about bad dir permissions
-RUN echo >>/root/.bashrc && \
-	echo "chmod 0700 /root/.gnupg" >>/root/.bashrc
+# Update .bashrc
+RUN echo      >>/root/.bashrc && \
+	echo "cd" >>/root/.bashrc
 
 # ------------------------------------------------------------------------------
-# Install webstore client binaries
+# Install webstore client binaries and sepulcher scripts
 COPY --from=build /webstore/src/ws_get.exe /webstore/src/ws_post.exe /usr/bin/
+COPY scripts/* /usr/bin/
 
 # ------------------------------------------------------------------------------
 # Add volumes
-VOLUME /root/.gnupg
 VOLUME /root/xfer
 
 # ------------------------------------------------------------------------------

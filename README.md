@@ -1,7 +1,7 @@
 # Sepulcher
 A docker tomb for your encrypted messages built from
 * [webstore](https://github.com/Fullaxx/webstore)
-* [gnupg](https://gnupg.org/)
+* [OpenSSL](https://www.openssl.org/)
 
 ## About this Software
 Sepulcher is designed for those who want full control over their communications.
@@ -23,89 +23,41 @@ docker build -t="fullaxx/sepulcher" github.com/Fullaxx/sepulcher
 ## Launch Sepulcher Docker Container
 ```
 docker run -it \
--v /srv/docker/alice/gnupg:/root/.gnupg \
 -v /srv/docker/alice/xfer:/root/xfer \
 fullaxx/sepulcher
 ```
 
-## Generate your GPG identity
+## Step 1: Publish your Identity
+publish_identity.sh will generate your private key and create your public certificate. \
+Once your identity is created, it will publish your certificate to the keyserver. \
+A Cert Token is printed so that other can retrieve your identity.
 ```
-# gpg2 --full-gen-key
-Real name: Alice
-Email address: alice@gmail.com
-Comment:
-You selected this USER-ID:
-    "Alice <alice@gmail.com>"
-...
-pub   rsa4096 2021-01-30 [SC] [expires: 2021-04-30]
-      951D7434D9DD329BC695BD3690B8A2BADF61CAF3
-uid                      Alice <alice@gmail.com>
-sub   rsa4096 2021-01-30 [E] [expires: 2021-04-30]
+# publish_identity.sh 30
+Cert Token: 4c4d93788ee46605c98596abc6a36a55ae74a42f5474b15929b38bf9baca32cd
 ```
 
-## Export and Publish your GPG identity
-Alice will export her public key and publish it to the keyserver. \
-The final token can be given out at her discretion.
+## Step 2: Retrieve another Identity
+retrieve_identity.sh will retrieve the certificate for a specified user. \
+This script will take a Name and the Cert Token that was generated in Step 1 by said user.
 ```
-# gpg2 -a -o alice.asc --export 951D7434D9DD329BC695BD3690B8A2BADF61CAF3
-
-# ws_post.exe -c -v -s -H keys.dspi.org -P 443 -a 4 -f alice.asc
-Compressing: 3134 bytes
-Uploading: 2981 bytes
-Token: 258c5a8abc050d9f4a3c60674ea3b9808b2b8c3b6a6195e22f46325670d3cb7d
+# retrieve_identity.sh Alice 4c4d93788ee46605c98596abc6a36a55ae74a42f5474b15929b38bf9baca32cd
+-rw-r--r-- 1 root root 3361 Feb  2 13:21 Alice/public.crt
 ```
 
-## Download and Import a published identity
-We assume that Bob followed the above example and published his public key. \
-Bob will gave Alice the token: 30970b83c47b03cd2c3ea36439bea1d7886a6e538e6a24cd2fa0f929848ee62f
+## Step 3: Encrypt and Post a message
+post_file.sh will encrypt and post a message for a specified user. \
+In order to encrypt a message for Bob, you must have a certificate for Bob. (Step 2) \
+The CipherText Token can be given to said user so they can retrieve the encryped message.
 ```
-# ws_get.exe -s -H keys.dspi.org -P 443 -t 30970b83c47b03cd2c3ea36439bea1d7886a6e538e6a24cd2fa0f929848ee62f -f bob.asc
-
-# gpg2 --import bob.asc
-gpg: key F128878CD6EAEE8B: public key "XbobX <XbobX@gmail.com>" imported
-gpg: Total number processed: 1
-gpg:               imported: 1
-
-# gpg2 --fingerprint F128878CD6EAEE8B
-pub   rsa4096 2021-01-30 [SC] [expires: 2021-04-30]
-      7341 95A1 AA90 088B EE71  96D1 F128 878C D6EA EE8B
-uid           [  full  ] XbobX <XbobX@gmail.com>
-sub   rsa4096 2021-01-30 [E] [expires: 2021-04-30]
-
-# gpg2 --sign-key F128878CD6EAEE8B
+# post_file.sh Bob message.txt
+CipherText Token: 2a077b723c44af935c28b3e8bd5aa1e4c2ccf54b6e7f19a229b9cb192261dc3327f1a8bc31886e944f4c02087daec87365b150f96c4ad0ed22556f317e6390b2
 ```
 
-## Encrypt and Publish a message
-Now that Alice has a public key for Bob, she can encrypt a message to Bob. \
-After she publishes her message, she can send Bob the token.
+## Step 4: Get and Decrypt a message
+Bob will use the CipherText Token he got from Alice to retrieve and decrypt the message.
 ```
-# echo "This is a message for Bob" >msg_for_bob.txt
-
-# gpg2 -o msg_for_bob.gpg -r XbobX -s -e msg_for_bob.txt
-
-# ws_post.exe -v -s -H msgs.dspi.org -P 443 -a 6 -f msg_for_bob.gpg
-Uploading: 786 bytes
-Token: 11cf1c5f3155319e86f733c05c041ea578c55ed283d81b21a9a3049cb04d1ad349632e5b3e82366071b3af44d060a7093a8364a7dc2aa769cca46f97daa19686
-```
-
-## Retrieve and Decrypt a message
-Bob will use the token he got from Alice to retrieve and decrypt the message.
-```
-# ws_get.exe -s -H msgs.dspi.org -P 443 -t 11cf1c5f3155319e86f733c05c041ea578c55ed283d81b21a9a3049cb04d1ad349632e5b3e82366071b3af44d060a7093a8364a7dc2aa769cca46f97daa19686 -f msg_for_bob.gpg
-
-# gpg2 -o msg_for_bob.txt -d msg_for_bob.gpg
-gpg: encrypted with 4096-bit RSA key, ID 44851B4FAD37B260, created 2021-01-30
-      "XbobX <XbobX@gmail.com>"
-
-# cat msg_for_bob.txt
-This is a message for Bob
+# get_file.sh 2a077b723c44af935c28b3e8bd5aa1e4c2ccf54b6e7f19a229b9cb192261dc3327f1a8bc31886e944f4c02087daec87365b150f96c4ad0ed22556f317e6390b2 new.txt
 ```
 
 ## More Info
 * Howto Run [Sepulcher Server-Side Components](https://github.com/Fullaxx/sepulcher/blob/master/SERVERSIDE.md)
-* [GnuPG User Guides](https://www.gnupg.org/documentation/guides.html)
-* A Practical Guide to GPG: 
-[P1](https://www.linuxbabe.com/security/a-practical-guide-to-gpg-part-1-generate-your-keypair) /
-[P2](https://www.linuxbabe.com/security/a-pratical-gpg-guide-part-2-encrypt-and-decrypt-message) /
-[P3](https://www.linuxbabe.com/security/a-practical-guide-to-gpg-part-3-working-with-public-key) /
-[P4](https://www.linuxbabe.com/security/a-practical-guide-to-gpg-part-4-digital-signature)
