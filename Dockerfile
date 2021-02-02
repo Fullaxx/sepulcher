@@ -28,7 +28,7 @@ RUN apt-get update && \
 # ------------------------------------------------------------------------------
 # Update .bashrc
 RUN echo      >>/root/.bashrc && \
-	echo "cd" >>/root/.bashrc
+	echo "cd /data" >>/root/.bashrc
 
 # ------------------------------------------------------------------------------
 # Install webstore client binaries and sepulcher scripts
@@ -37,7 +37,7 @@ COPY scripts/* /usr/bin/
 
 # ------------------------------------------------------------------------------
 # Add volumes
-VOLUME /root/xfer
+VOLUME /data
 
 # ------------------------------------------------------------------------------
 # Define default command

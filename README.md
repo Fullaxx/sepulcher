@@ -23,7 +23,7 @@ docker build -t="fullaxx/sepulcher" github.com/Fullaxx/sepulcher
 ## Launch Sepulcher Docker Container
 ```
 docker run -it \
--v /srv/docker/sepulcher/xfer:/root/xfer \
+-v /srv/docker/sepulcher/data:/data \
 fullaxx/sepulcher
 ```
 
