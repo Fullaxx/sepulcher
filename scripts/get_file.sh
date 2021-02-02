@@ -13,6 +13,11 @@ fi
 
 set -e
 
+unset SECFLAG
+if [ "${MSSEC}" == "1" ]; then
+  SECFLAG="-s"
+fi
+
 if [ -z "$1" ]; then
   bail "$0: <CTTOKEN> <PTFILE>"
 fi
@@ -24,8 +29,9 @@ fi
 CTTOKEN="$1"
 PTFILE="$2"
 
-if [ ! -r me/private.key ]; then
-  bail "me/private.key is not readable!"
+PRIVATEKEY="me/private.key"
+if [ ! -r ${PRIVATEKEY} ]; then
+  bail "${PRIVATEKEY} is not readable!"
 fi
 
 if [ -f ${PTFILE} ]; then
@@ -33,6 +39,6 @@ if [ -f ${PTFILE} ]; then
 fi
 
 CTFILE=`mktemp`
-ws_get.exe -s -H msgs.dspi.org -P 443 -t ${CTTOKEN} -f ${CTFILE}
-${OSSLBIN} smime -decrypt -binary -in ${CTFILE} -inform DER -out ${PTFILE} -inkey me/private.key
+ws_get.exe ${SECFLAG} -H ${MSHOST} -P ${MSPORT} -t ${CTTOKEN} -f ${CTFILE}
+${OSSLBIN} smime -decrypt -binary -in ${CTFILE} -inform DER -out ${PTFILE} -inkey ${PRIVATEKEY}
 rm -f ${CTFILE}

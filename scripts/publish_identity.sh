@@ -13,6 +13,11 @@ fi
 
 set -e
 
+unset SECFLAG
+if [ "${KSSEC}" == "1" ]; then
+  SECFLAG="-s"
+fi
+
 if [ -z "$1" ]; then
   bail "$0: <DAYS>"
 fi
@@ -22,18 +27,20 @@ if [ ! -d me ]; then
   mkdir me
 fi
 
-if [ ! -f me/private.key ]; then
-  ${OSSLBIN} genrsa -aes256 -out me/private.key 8192
+PRIVATEKEY="me/private.key"
+if [ ! -f ${PRIVATEKEY} ]; then
+  ${OSSLBIN} genrsa -aes256 -out ${PRIVATEKEY} 8192
 fi
 
 # Unnecessary Right Now
 #if [ ! -f me/public.key ]; then
-#  ${OSSLBIN} rsa -in me/private.key -pubout -out me/public.key
+#  ${OSSLBIN} rsa -in ${PRIVATEKEY} -pubout -out me/public.key
 #fi
 
-if [ ! -f me/public.crt ]; then
-  ${OSSLBIN} req -x509 -new -days ${DAYS} -key me/private.key -out me/public.crt -subj "/C=XX/ST=Freedom/L=Ether/O=Sepulcher/CN=MYNAME"
+PUBCERT="me/public.crt"
+if [ ! -f ${PUBCERT} ]; then
+  ${OSSLBIN} req -x509 -new -days ${DAYS} -key ${PRIVATEKEY} -out ${PUBCERT} -subj "/C=XX/ST=Freedom/L=Ether/O=Sepulcher/CN=MYNAME"
 fi
 
-CERTTOKEN=`ws_post.exe -s -c -v -H keys.dspi.org -P 443 -a 4 -f me/public.crt | grep 'Token:' | awk '{print $2}'`
+CERTTOKEN=`ws_post.exe ${SECFLAG} -c -v -H ${KSHOST} -P ${KSPORT} -a 4 -f ${PUBCERT} | grep 'Token:' | awk '{print $2}'`
 echo "Cert Token: ${CERTTOKEN}"

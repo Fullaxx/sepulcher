@@ -33,7 +33,7 @@ RUN echo      >>/root/.bashrc && \
 # ------------------------------------------------------------------------------
 # Install webstore client binaries and sepulcher scripts
 COPY --from=build /webstore/src/ws_get.exe /webstore/src/ws_post.exe /usr/bin/
-COPY scripts/* /usr/bin/
+COPY scripts/*.sh /usr/bin/
 
 # ------------------------------------------------------------------------------
 # Add volumes

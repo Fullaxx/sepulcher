@@ -22,8 +22,8 @@ NAME="$1"
 if [ ! -d ${NAME} ]; then
   echo "${NAME} does not exist!"
 fi
-CERT="${NAME}/public.crt"
 
+CERT="${NAME}/public.crt"
 if [ ! -f ${CERT} ]; then
   echo "${CERT} does not exist!"
 fi

@@ -20,9 +20,20 @@ docker pull fullaxx/sepulcher
 docker build -t="fullaxx/sepulcher" github.com/Fullaxx/sepulcher
 ```
 
-## Launch Sepulcher Docker Container
+## Launch Sepulcher Docker Container (HTTPS mode)
 ```
 docker run -it \
+-e KSHOST=keys.dspi.org -e KSPORT=443 -e KSSEC=1 \
+-e MSHOST=msgs.dspi.org -e MSPORT=443 -e MSSEC=1 \
+-v /srv/docker/sepulcher/data:/data \
+fullaxx/sepulcher
+```
+
+## Launch Sepulcher Docker Container (HTTP mode)
+```
+docker run -it \
+-e KSHOST=keys.dspi.org -e KSPORT=80 \
+-e MSHOST=msgs.dspi.org -e MSPORT=80 \
 -v /srv/docker/sepulcher/data:/data \
 fullaxx/sepulcher
 ```

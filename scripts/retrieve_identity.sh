@@ -13,6 +13,11 @@ fi
 
 set -e
 
+unset SECFLAG
+if [ "${KSSEC}" == "1" ]; then
+  SECFLAG="-s"
+fi
+
 if [ -z "$1" ]; then
   bail "$0: <NAME> <CERTTOKEN>"
 fi
@@ -27,7 +32,7 @@ TOKEN="$2"
 if [ ! -d ${NAME} ]; then
   mkdir ${NAME}
 fi
-CERT="${NAME}/public.crt"
 
-ws_get.exe -s -H keys.dspi.org -P 443 -t ${TOKEN} -f ${CERT}
+CERT="${NAME}/public.crt"
+ws_get.exe ${SECFLAG} -H ${KSHOST} -P ${KSPORT} -t ${TOKEN} -f ${CERT}
 ls -l ${CERT}
