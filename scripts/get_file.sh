@@ -2,9 +2,17 @@
 
 bail()
 {
-  echo "$1"
+  >&2 echo "$1"
   exit 1
 }
+
+if [ -z "${MSHOST}" ]; then
+  bail "MSHOST is not set!"
+fi
+
+if [ -z "${MSPORT}" ]; then
+  bail "MSHOST is not set!"
+fi
 
 OSSLBIN=`which openssl`
 if [ "$?" != "0" ]; then

@@ -2,9 +2,17 @@
 
 bail()
 {
-  echo "$1"
+  >&2 echo "$1"
   exit 1
 }
+
+if [ -z "${KSHOST}" ]; then
+  bail "KSHOST is not set!"
+fi
+
+if [ -z "${KSPORT}" ]; then
+  bail "KSPORT is not set!"
+fi
 
 OSSLBIN=`which openssl`
 if [ "$?" != "0" ]; then
