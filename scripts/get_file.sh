@@ -41,4 +41,5 @@ fi
 CTFILE=`mktemp`
 ws_get.exe ${SECFLAG} -H ${MSHOST} -P ${MSPORT} -t ${CTTOKEN} -f ${CTFILE}
 ${OSSLBIN} smime -decrypt -binary -in ${CTFILE} -inform DER -out ${PTFILE} -inkey ${PRIVATEKEY}
+echo "${PTFILE} Decrypted Successfully!"
 rm -f ${CTFILE}

@@ -43,4 +43,6 @@ if [ ! -f ${PUBCERT} ]; then
 fi
 
 CERTTOKEN=`ws_post.exe ${SECFLAG} -c -v -H ${KSHOST} -P ${KSPORT} -a 4 -f ${PUBCERT} | grep 'Token:' | awk '{print $2}'`
+echo "Private Key: ${PRIVATEKEY}"
+echo "Public Cert: ${PUBCERT}"
 echo "Cert Token: ${CERTTOKEN}"

@@ -35,4 +35,4 @@ fi
 
 CERT="${NAME}/public.crt"
 ws_get.exe ${SECFLAG} -H ${KSHOST} -P ${KSPORT} -t ${TOKEN} -f ${CERT}
-ls -l ${CERT}
+echo "Identity Saved for ${NAME}: ${CERT}"

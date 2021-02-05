@@ -55,7 +55,6 @@ This script will take a Name and the Cert Token that was generated in Step 1 by 
 Bob will retrieve Alice's identity like so:
 ```
 # retrieve_identity.sh Alice 4c4d93788ee46605c98596abc6a36a55ae74a42f5474b15929b38bf9baca32cd
--rw-r--r-- 1 root root 3361 Feb  2 13:21 Alice/public.crt
 ```
 
 ## Step 3: Encrypt and Post a message
