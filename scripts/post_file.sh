@@ -58,6 +58,6 @@ fi
 CTFILE=`mktemp`
 ${OSSLBIN} smime -encrypt -binary -aes-256-cbc -in ${PTFILE} -out ${CTFILE} -outform DER ${CERT}
 CTTOKEN=`ws_post.exe ${SECFLAG} -c -v -H ${MSHOST} -P ${MSPORT} -a 6 -f ${CTFILE} | grep 'Token:' | awk '{print $2}'`
-echo "${CTFILE} Posted Successfully!"
+echo "${PTFILE} Encrypted and Posted Successfully!"
 echo "CipherText Token: ${CTTOKEN}"
 rm -f ${CTFILE}
