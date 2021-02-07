@@ -15,3 +15,5 @@ addons:
 script:
   - cd src
   - ./compile.sh
+  - cd tests
+  - ./test_all_ops.sh
