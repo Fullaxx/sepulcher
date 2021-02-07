@@ -9,7 +9,7 @@ Sepulcher is designed for those who want full control over their communications.
 It provides an alternative to typical key/message distribution methods.
 For example, maybe you don't want your public key made available to the everyone.
 Maybe you want to distribute a different set of keys to different recipients.
-Maybe you don't want all your encrypted communications left in your inbox until the end of time.
+Maybe you don't want all your encrypted communications left in someone else's mailbox until the end of time.
 Sepulcher facilitates the distribution of encrypted data on systems that you control.
 
 ## Base Docker Image
