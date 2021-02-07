@@ -1,1 +1,10 @@
 *~
+*.dbg
+*.exe
+*.key
+*.crt
+*.sign
+*.pem
+*.der
+*.enc
+*.id
