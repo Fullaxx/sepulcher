@@ -1,12 +1,13 @@
 # ------------------------------------------------------------------------------
 # Install build tools and compile webstore
 FROM ubuntu:focal AS build
+ADD . /sepulcher
 RUN apt-get update && \
 	apt-get install -y build-essential git ca-certificates \
 	  libcurl4-gnutls-dev libgcrypt20-dev && \
 	git clone https://github.com/Fullaxx/webstore.git webstore && \
-	cd webstore/src && \
-	./compile_clients.sh
+	cd /webstore/src && ./compile_clients.sh && \
+	cd /sepulcher/src && ./compile.sh
 
 # ------------------------------------------------------------------------------
 # Pull base image
@@ -31,8 +32,9 @@ RUN echo      >>/root/.bashrc && \
 	echo "cd /data" >>/root/.bashrc
 
 # ------------------------------------------------------------------------------
-# Install webstore client binaries and sepulcher scripts
+# Install webstore client binaries and sepulcher scripts/binaries
 COPY --from=build /webstore/src/ws_get.exe /webstore/src/ws_post.exe /usr/bin/
+COPY --from=build /sepulcher/src/*.exe /usr/bin/
 COPY scripts/*.sh /usr/bin/
 
 # ------------------------------------------------------------------------------

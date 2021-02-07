@@ -38,13 +38,17 @@ fi
 NAME="$1"
 PTFILE="$2"
 
+if [ ! -r private.key ]; then
+  bail "private.key is not readable!"
+fi
+
 if [ ! -d ${NAME} ]; then
   bail "${NAME} not found!"
 fi
 
-CERT="${NAME}/public.crt"
-if [ ! -r ${CERT} ]; then
-  bail "${CERT} not found!"
+PUBID="${NAME}/public.id"
+if [ ! -r ${PUBID} ]; then
+  bail "${PUBID} not found!"
 fi
 
 if [ ! -f ${PTFILE} ]; then
@@ -55,9 +59,33 @@ if [ ! -r ${PTFILE} ]; then
   bail "${PTFILE} is not readable!"
 fi
 
-CTFILE=`mktemp`
-${OSSLBIN} smime -encrypt -binary -aes-256-cbc -in ${PTFILE} -out ${CTFILE} -outform DER ${CERT}
-CTTOKEN=`ws_post.exe ${SECFLAG} -c -v -H ${MSHOST} -P ${MSPORT} -a 6 -f ${CTFILE} | grep 'Token:' | awk '{print $2}'`
+# extract PUBCERT from recipient's public.id
+TEMPDIR=`mktemp -d`
+extract_id.exe ${PUBID} ${TEMPDIR}
+CERT="${TEMPDIR}/public.crt"
+if [ ! -r ${CERT} ]; then
+  bail "${CERT} is not readable!"
+fi
+
+# Create Digest of Plaintext File
+PTSIGN="${TEMPDIR}/pt.sign"
+${OSSLBIN} dgst -sha512 -sign private.key -out ${PTSIGN} ${PTFILE}
+
+# Encrypt Plaintext (DER not PEM)
+CTFILE="${TEMPDIR}/ct.data"
+${OSSLBIN} smime -encrypt -binary -aes-256-cbc -outform DER -in ${PTFILE} -out ${CTFILE} ${CERT}
+
+# Create Digest of Ciphertext
+CTSIGN="${TEMPDIR}/ct.sign"
+${OSSLBIN} dgst -sha512 -sign private.key -out ${CTSIGN} ${CTFILE}
+
+# Bundle our encrypted file and digest
+ENCRYPTEDBUNDLE="${TEMPDIR}/bundle.enc"
+wrap_file.exe ${PTSIGN} ${CTFILE} ${CTSIGN} >${ENCRYPTEDBUNDLE}
+
+CTTOKEN=`ws_post.exe ${SECFLAG} -c -v -H ${MSHOST} -P ${MSPORT} -a 6 -f ${ENCRYPTEDBUNDLE} | grep 'Token:' | awk '{print $2}'`
 echo "${PTFILE} Encrypted and Posted Successfully!"
 echo "CipherText Token: ${CTTOKEN}"
-rm -f ${CTFILE}
+
+# Clean Up
+rm -r ${TEMPDIR}

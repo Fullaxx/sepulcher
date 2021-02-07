@@ -14,6 +14,10 @@ if [ -z "${KSPORT}" ]; then
   bail "KSPORT is not set!"
 fi
 
+if [ -z "${IDTOKEN}" ]; then
+  bail "IDTOKEN is not set!"
+fi
+
 OSSLBIN=`which openssl`
 if [ "$?" != "0" ]; then
   bail "openssl not found!"
@@ -27,20 +31,19 @@ if [ "${KSSEC}" == "1" ]; then
 fi
 
 if [ -z "$1" ]; then
-  bail "$0: <NAME> <CERTTOKEN>"
-fi
-
-if [ -z "$2" ]; then
-  bail "$0: <NAME> <CERTTOKEN>"
+  bail "$0: <NAME>"
 fi
 
 NAME="$1"
-TOKEN="$2"
 
 if [ ! -d ${NAME} ]; then
   mkdir ${NAME}
 fi
 
-CERT="${NAME}/public.crt"
-ws_get.exe ${SECFLAG} -H ${KSHOST} -P ${KSPORT} -t ${TOKEN} -f ${CERT}
-echo "Identity Saved for ${NAME}: ${CERT}"
+PUBID="${NAME}/public.id"
+ws_get.exe ${SECFLAG} -H ${KSHOST} -P ${KSPORT} -t ${IDTOKEN} -f ${PUBID}
+echo "Identity Saved for ${NAME}: ${PUBID}"
+
+# Extract the public.key for signature checking
+extract_id.exe ${PUBID} ${NAME}
+rm ${NAME}/public.crt
