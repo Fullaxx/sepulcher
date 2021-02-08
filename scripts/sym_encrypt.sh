@@ -34,4 +34,4 @@ if [ ! -f ${KEYFILE} ]; then
 fi
 
 # Encrypt a file
-openssl enc -e -aes-256-cbc -md sha512 -pbkdf2 -iter 100000 -salt -in ${PTFILE} -out ${CTFILE} -pass file:${KEYFILE}
+openssl enc -e -aes-256-cbc -salt -md sha512 -pbkdf2 -iter 100000 -in ${PTFILE} -out ${CTFILE} -pass file:${KEYFILE}
