@@ -1,8 +1,9 @@
 [![Build Status](https://travis-ci.com/Fullaxx/sepulcher.svg?branch=master)](https://travis-ci.com/Fullaxx/sepulcher)
 # Sepulcher
 A docker tomb for your encrypted messages built from
-* [webstore](https://github.com/Fullaxx/webstore)
 * [OpenSSL](https://www.openssl.org/)
+* [webstore](https://github.com/Fullaxx/webstore)
+* [CHAOSgen](https://github.com/Fullaxx/CHAOSgen)
 
 ## About this Software
 Sepulcher is designed for those who want full control over their communications.
