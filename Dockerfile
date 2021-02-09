@@ -7,7 +7,7 @@ RUN apt-get update && \
 	  libcurl4-gnutls-dev libgcrypt20-dev && \
 	git clone https://github.com/Fullaxx/CHAOSgen.git CHAOSgen && \
 	git clone https://github.com/Fullaxx/webstore.git webstore && \
-	cd /CHAOSgen && ./compile.sh && \
+	cd /CHAOSgen/src && ./compile.sh && \
 	cd /webstore/src && ./compile_clients.sh && \
 	cd /sepulcher/src && ./compile.sh
 
@@ -35,7 +35,7 @@ RUN echo      >>/root/.bashrc && \
 
 # ------------------------------------------------------------------------------
 # Install CHAOSgen keygen, webstore client binaries, and sepulcher
-COPY --from=build /CHAOSgen/keygen.exe /usr/bin/chaos_keygen.exe
+COPY --from=build /CHAOSgen/src/keygen.exe /usr/bin/chaos_keygen.exe
 COPY --from=build /webstore/src/ws_get.exe /webstore/src/ws_post.exe /usr/bin/
 COPY --from=build /sepulcher/src/*.exe /usr/bin/
 COPY scripts/*.sh /usr/bin/
