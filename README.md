@@ -102,5 +102,29 @@ my_msg.txt Decrypted Successfully!
 Checking Alice/public.key ... Verified OK
 ```
 
+## Symmetric Encryption for group communications
+While the above is great for point-to-point communications, you may want to be able to easily send encrypted files to a group of recipients.
+Symmetric encryption with a set of shared secret keys is a great way to mass-distribute encrypted files.
+There are many ways to generate key files, but in this example we are going to use keygen from CHAOSgen.
+This command will generate 1000 binary keys of 1000 random bytes each.
+You can use the methods described above to distribute a tarball of keys that will available for future encrypted communications.
+These keys will be fed to the scripts sym_encrypt.sh and sym_decrypt.sh to facilitate the symmetric encryption operations.
+```
+mkdir keys
+gen_chaos_keys.sh 1000 1000 keys
+```
+After key generation and distribution is complete, use the following to encrypt/decrypt with shared secret keys. \
+For added security, shred any key after it gets used. Never use the same key twice. \
+Actions for the sender:
+```
+sym_encrypt.sh files.tar files.enc keys/042.bin
+shred -n 9 -u keys/042.bin
+```
+Actions for any recipient:
+```
+sym_decrypt.sh files.enc files.tar keys/042.bin
+shred -n 9 -u keys/042.bin
+```
+
 ## More Info
 * Howto Run [Sepulcher Server-Side Components](https://github.com/Fullaxx/sepulcher/blob/master/SERVERSIDE.md)
