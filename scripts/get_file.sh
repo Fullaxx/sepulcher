@@ -71,7 +71,7 @@ CTFILE="${TEMPDIR}/ct.data"
 PTSIGN="${TEMPDIR}/pt.sign"
 
 # Validate Ciphertext
-echo -n "Checking ${SENDERPUBKEY} ... "
+echo -n "Validating Ciphertext with ${SENDERPUBKEY} ... "
 ${OSSLBIN} dgst -sha512 -verify ${SENDERPUBKEY} -signature ${CTSIGN} ${CTFILE}
 
 # Decrypt Ciphertext (DER not PEM)
@@ -79,7 +79,7 @@ ${OSSLBIN} smime -decrypt -binary -inform DER -in ${CTFILE} -out ${PTFILE} -inke
 echo "${PTFILE} Decrypted Successfully!"
 
 # Validate Plaintext
-echo -n "Checking ${SENDERPUBKEY} ... "
+echo -n "Validating Plaintext with ${SENDERPUBKEY} ... "
 ${OSSLBIN} dgst -sha512 -verify ${SENDERPUBKEY} -signature ${PTSIGN} ${PTFILE}
 
 # Clean Up
