@@ -97,9 +97,9 @@ get_file.sh Alice my_msg.txt
 ```
 The above command will output something like this:
 ```
-Checking Alice/public.key ... Verified OK
+Validating Ciphertext with Alice/public.key ... Verified OK
 my_msg.txt Decrypted Successfully!
-Checking Alice/public.key ... Verified OK
+Validating Plaintext with Alice/public.key ... Verified OK
 ```
 
 ## Symmetric Encryption for group communications
