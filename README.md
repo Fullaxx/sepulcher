@@ -23,6 +23,10 @@ docker build -t="fullaxx/sepulcher" github.com/Fullaxx/sepulcher
 ```
 
 ## Launch Sepulcher Docker Container (HTTPS mode)
+<code>KSHOST</code> and <code>KSPORT</code> are the ENV variables to specify the webstore service for key transmission/retrieval. \
+<code>MSHOST</code> and <code>MSPORT</code> are the ENV variables to specify the webstore service for message transmission/retrieval. \
+<code>KSSEC</code> and <code>MSSEC</code> indicate that HTTPS must be used to negotiate with the services. \
+The following will use the webstore serive at https://keys.dspi.org:443 and https://msgs.dspi.org:443
 ```
 docker run -it \
 -e KSHOST=keys.dspi.org -e KSPORT=443 -e KSSEC=1 \
@@ -32,6 +36,9 @@ fullaxx/sepulcher
 ```
 
 ## Launch Sepulcher Docker Container (HTTP mode)
+<code>KSHOST</code> and <code>KSPORT</code> are the ENV variables to specify the webstore service for key transmission/retrieval. \
+<code>MSHOST</code> and <code>MSPORT</code> are the ENV variables to specify the webstore service for message transmission/retrieval. \
+The following will use the webstore serive at http://keys.dspi.org:80 and http://msgs.dspi.org:80
 ```
 docker run -it \
 -e KSHOST=keys.dspi.org -e KSPORT=80 \
