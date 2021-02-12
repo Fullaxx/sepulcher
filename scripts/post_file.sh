@@ -38,8 +38,9 @@ fi
 NAME="$1"
 PTFILE="$2"
 
-if [ ! -r private.key ]; then
-  bail "private.key is not readable!"
+PRIVATEKEY="private.key"
+if [ ! -r ${PRIVATEKEY} ]; then
+  bail "${PRIVATEKEY} is not readable!"
 fi
 
 if [ ! -d ${NAME} ]; then
@@ -69,23 +70,27 @@ fi
 
 # Create Digest of Plaintext File
 PTSIGN="${TEMPDIR}/pt.sign"
-${OSSLBIN} dgst -sha512 -sign private.key -out ${PTSIGN} ${PTFILE}
+echo "Using ${PRIVATEKEY} to Sign Plaintext ..."
+${OSSLBIN} dgst -sha512 -sign ${PRIVATEKEY} -out ${PTSIGN} ${PTFILE}
 
 # Encrypt Plaintext (DER not PEM)
 CTFILE="${TEMPDIR}/ct.data"
+echo "Encrypting Plaintext ..."
 ${OSSLBIN} smime -encrypt -binary -aes-256-cbc -outform DER -in ${PTFILE} -out ${CTFILE} ${CERT}
 
 # Create Digest of Ciphertext
 CTSIGN="${TEMPDIR}/ct.sign"
-${OSSLBIN} dgst -sha512 -sign private.key -out ${CTSIGN} ${CTFILE}
+echo "Using ${PRIVATEKEY} to Sign Ciphertext ..."
+${OSSLBIN} dgst -sha512 -sign ${PRIVATEKEY} -out ${CTSIGN} ${CTFILE}
 
 # Bundle our encrypted file and digest
 ENCRYPTEDBUNDLE="${TEMPDIR}/bundle.enc"
 wrap_file.exe ${PTSIGN} ${CTFILE} ${CTSIGN} >${ENCRYPTEDBUNDLE}
 
-CTTOKEN=`ws_post.exe ${SECFLAG} -c -v -H ${MSHOST} -P ${MSPORT} -a 6 -f ${ENCRYPTEDBUNDLE} | grep 'Token:' | awk '{print $2}'`
+ws_post.exe ${SECFLAG} -c -v -H ${MSHOST} -P ${MSPORT} -a 6 -f ${ENCRYPTEDBUNDLE} >/tmp/post.ct.out
+CTTOKEN=`grep 'Token:' /tmp/post.ct.out | awk '{print $2}'`
 echo "${PTFILE} Encrypted and Posted Successfully!"
 echo "CipherText Token: ${CTTOKEN}"
 
 # Clean Up
-rm -r ${TEMPDIR}
+rm -r ${TEMPDIR} /tmp/post.ct.out

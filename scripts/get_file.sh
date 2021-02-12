@@ -75,6 +75,7 @@ echo -n "Validating Ciphertext with ${SENDERPUBKEY} ... "
 ${OSSLBIN} dgst -sha512 -verify ${SENDERPUBKEY} -signature ${CTSIGN} ${CTFILE}
 
 # Decrypt Ciphertext (DER not PEM)
+echo "Using ${PRIVATEKEY} to Decrypt Ciphertext ..."
 ${OSSLBIN} smime -decrypt -binary -inform DER -in ${CTFILE} -out ${PTFILE} -inkey ${PRIVATEKEY}
 echo "${PTFILE} Decrypted Successfully!"
 
