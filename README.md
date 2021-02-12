@@ -66,7 +66,7 @@ Identity Token: 4c4d93788ee46605c98596abc6a36a55ae74a42f5474b15929b38bf9baca32cd
 ## Step 2: Retrieve another Identity
 retrieve_identity.sh will retrieve the identity for a specified user. \
 This script will take a Name as the first argument. \
-The Identity Token that was generated in Step 1 by the sender will be provided as an env variable. \
+The Identity Token that was generated in Step 1 by the sender will be provided as an ENV variable. \
 Bob will retrieve the identity and name it Alice:
 ```
 IDTOKEN="4c4d93788ee46605c98596abc6a36a55ae74a42f5474b15929b38bf9baca32cd" \
@@ -93,7 +93,7 @@ CipherText Token: 2a077b723c44af935c28b3e8bd5aa1e4c2ccf54b6e7f19a229b9cb192261dc
 ## Step 4: Get and Decrypt a message
 Bob will use get_file.sh to retrieve and decrypt the file from Alice. \
 This script will take the name of the sender as the first arg and the plaintext file to create as the second. \
-The CipherText Token that was generated in Step 3 by the sender will be provided as an env variable. \
+The CipherText Token that was generated in Step 3 by the sender will be provided as an ENV variable. \
 After download, it will validate that the encrypted file was sent by Alice. \
 If true, it will decrypt the message. \
 After decryption, it will validate that the plaintext file was also sent by Alice. \
