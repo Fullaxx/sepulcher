@@ -87,6 +87,15 @@ ${OSSLBIN} dgst -sha512 -sign ${PRIVATEKEY} -out ${CTSIGN} ${CTFILE}
 ENCRYPTEDBUNDLE="${TEMPDIR}/bundle.enc"
 wrap_file.exe ${PTSIGN} ${CTFILE} ${CTSIGN} >${ENCRYPTEDBUNDLE}
 
+# Check our file size against the server config
+ENCBUNDLESIZE=`du -b ${ENCRYPTEDBUNDLE} | awk '{print $1}'`
+MAXUPLOADSIZE=`ws_cfg.exe ${SECFLAG} -H ${MSHOST} -P ${MSPORT} | grep 'MAXUPLOADSIZE:' | awk '{print $2}'`
+if [ ${ENCBUNDLESIZE} -gt ${MAXUPLOADSIZE} ]; then
+  rm -rf ${TEMPDIR}
+  bail "Your encrypted bundle is too large for this server configuration! (${ENCBUNDLESIZE} > ${MAXUPLOADSIZE})"
+fi
+
+# Post our file to the server
 ws_post.exe ${SECFLAG} -c -v -H ${MSHOST} -P ${MSPORT} -a 6 -f ${ENCRYPTEDBUNDLE} >/tmp/post.ct.out
 CTTOKEN=`grep 'Token:' /tmp/post.ct.out | awk '{print $2}'`
 echo "${PTFILE} Encrypted and Posted Successfully!"

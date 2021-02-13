@@ -36,7 +36,7 @@ RUN echo      >>/root/.bashrc && \
 # ------------------------------------------------------------------------------
 # Install CHAOSgen keygen, webstore client binaries, and sepulcher
 COPY --from=build /CHAOSgen/src/keygen.exe /usr/bin/chaos_keygen.exe
-COPY --from=build /webstore/src/ws_get.exe /webstore/src/ws_post.exe /usr/bin/
+COPY --from=build /webstore/src/ws_*.exe /usr/bin/
 COPY --from=build /sepulcher/src/*.exe /usr/bin/
 COPY scripts/*.sh /usr/bin/
 
