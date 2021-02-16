@@ -7,7 +7,7 @@ These can be combined into 1 service if you desire.
 
 ## Start KeyStore Instance (for Public Key Transfer)
 For the KeyStore service, we run a generic webstore instance with 3 specific options: \
-REQPERIOD=4 and REQCOUNT=1 will limit connections from any IP address to 1 every 4 seconds. \
+REQPERIOD=3 and REQCOUNT=1 will limit connections from any IP address to 1 every 3 seconds. \
 MAXPOSTSIZE=16384 will limit any upload to 16384 bytes. This should be large enough for keys.
 ```bash
 KSIP="51.195.74.99"
@@ -22,7 +22,7 @@ redis
 docker run -d --rm --name keyshttp \
 -p ${KSIP}:80:8080 \
 -e MAXPOSTSIZE=16384 \
--e REQPERIOD=4 -e REQCOUNT=1 \
+-e REQPERIOD=3 -e REQCOUNT=1 \
 -e REDISIP=${RIP} \
 -e REDISPORT=${RPORT} \
 -v /srv/docker/keys/httplog:/log \
@@ -31,7 +31,7 @@ fullaxx/webstore
 docker run -d --rm --name keyshttps \
 -p ${KSIP}:443:8080 \
 -e MAXPOSTSIZE=16384 \
--e REQPERIOD=4 -e REQCOUNT=1 \
+-e REQPERIOD=3 -e REQCOUNT=1 \
 -e REDISIP=${RIP} \
 -e REDISPORT=${RPORT} \
 -e CERTFILE=config/live/keys.dspi.org/fullchain.pem \
@@ -43,7 +43,7 @@ fullaxx/webstore
 
 ## Start MsgStore Instance (for Message Distribution)
 For the MsgStore service, we run a generic webstore instance with 4 specific options: \
-REQPERIOD=5 and REQCOUNT=2 will limit connections from any IP address to 2 every 5 seconds. \
+REQPERIOD=3 and REQCOUNT=4 will limit connections from any IP address to 4 every 3 seconds. \
 BAR=1 tells the server to DELETE any message that is successfully retrieved. \
 MAXPOSTSIZE=1000000 will limit any upload to 1000000 bytes. \
 These options should be tailored for your specific needs.
@@ -60,7 +60,7 @@ redis
 docker run -d --rm --name msgshttp \
 -p ${MSIP}:80:8080 \
 -e BAR=1 -e MAXPOSTSIZE=1000000 \
--e REQPERIOD=5 -e REQCOUNT=2 \
+-e REQPERIOD=3 -e REQCOUNT=4 \
 -e REDISIP=${RIP} \
 -e REDISPORT=${RPORT} \
 -v /srv/docker/msgs/httplog:/log \
@@ -69,7 +69,7 @@ fullaxx/webstore
 docker run -d --rm --name msgshttps \
 -p ${MSIP}:443:8080 \
 -e BAR=1 -e MAXPOSTSIZE=1000000 \
--e REQPERIOD=5 -e REQCOUNT=2 \
+-e REQPERIOD=3 -e REQCOUNT=4 \
 -e REDISIP=${RIP} \
 -e REDISPORT=${RPORT} \
 -e CERTFILE=config/live/msgs.dspi.org/fullchain.pem \
