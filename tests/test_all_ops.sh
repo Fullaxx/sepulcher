@@ -19,16 +19,16 @@ openssl req -x509 -new -days 1 -key Bprivate.key -out Bpublic.crt -subj "/C=XX/S
 ../src/wrap_id.exe Bpublic.key Bpublic.crt >B.id
 
 # Create Plaintext
-cat ../src/* >allcode.txt
+cat ../src/*.? >allcode.txt
 sha256sum allcode.txt
 
-# A sending file to B
+# A sending signed/encrypted file to B
 openssl dgst -sha512 -sign Aprivate.key -out allcode.pt.sign allcode.txt
 openssl smime -encrypt -binary -aes-256-cbc -outform DER -in allcode.txt -out allcode.der Bpublic.crt
 openssl dgst -sha512 -sign Aprivate.key -out allcode.ct.sign allcode.der
 ../src/wrap_file.exe allcode.pt.sign allcode.der allcode.ct.sign > AtoB.bundle.enc
 
-# B checking/decrypting file from A
+# B validating/decrypting files from A
 mkdir transfer
 ../src/extract_id.exe A.id transfer
 ../src/extract_file.exe AtoB.bundle.enc transfer
