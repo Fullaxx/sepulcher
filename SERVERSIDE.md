@@ -2,13 +2,13 @@
 [Webstore](https://github.com/Fullaxx/webstore) is the data-storage backend for Sepulcher.
 The following describes how to run webstore in different ways. \
 One webstore instance will be configured for key transfer and the other will support message distribution. \
-The purpose of describing seperate 2 services is to demonstrate various configuration options. \
-These can be combined into 1 service if you desire.
+The purpose of describing two seperate services is to demonstrate various configuration options. \
+These can be combined into one service if you desire.
 
 ## Start KeyStore Instance (for Public Key Transfer)
 For the KeyStore service, we run a generic webstore instance with 3 specific options: \
-REQPERIOD=3 and REQCOUNT=1 will limit connections from any IP address to 1 every 3 seconds. \
-MAXPOSTSIZE=16384 will limit any upload to 16384 bytes. This should be large enough for keys.
+<code>REQPERIOD=3</code> and <code>REQCOUNT=1</code> will limit connections from any IP address to 1 every 3 seconds. \
+<code>MAXPOSTSIZE=16384</code> will limit any upload to 16384 bytes. This should be large enough for keys.
 ```bash
 KSIP="51.195.74.99"
 RIP="172.17.0.1"
@@ -43,9 +43,9 @@ fullaxx/webstore
 
 ## Start MsgStore Instance (for Message Distribution)
 For the MsgStore service, we run a generic webstore instance with 4 specific options: \
-REQPERIOD=3 and REQCOUNT=4 will limit connections from any IP address to 4 every 3 seconds. \
-BAR=1 tells the server to DELETE any message that is successfully retrieved. \
-MAXPOSTSIZE=1000000 will limit any upload to 1000000 bytes. \
+<code>REQPERIOD=3</code> and <code>REQCOUNT=4</code> will limit connections from any IP address to 4 every 3 seconds. \
+<code>BAR=1</code> tells the server to DELETE any message that is successfully retrieved. \
+<code>MAXPOSTSIZE=1000000</code> will limit any upload to 1000000 bytes. \
 These options should be tailored for your specific needs.
 ```bash
 MSIP="51.195.74.98"

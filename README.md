@@ -80,7 +80,7 @@ Identity Saved for Alice: Alice/public.id
 ## Step 3: Encrypt and Post a file
 post_file.sh will encrypt and post a file for a specified user. \
 In order to encrypt a file to Bob, you must have an identity for Bob. (Step 2) \
-After posting, the CipherText Token can be given to the recipient so they can go retrieve the encryped file. \
+After posting, the CipherText Token can be given to the recipient so they can retrieve the encrypted file. \
 Alice will post a file for Bob and give him the CipherText Token like so:
 ```
 post_file.sh Bob msg_to_Bob.txt
@@ -92,7 +92,7 @@ CipherText Token: 2a077b723c44af935c28b3e8bd5aa1e4c2ccf54b6e7f19a229b9cb192261dc
 
 ## Step 4: Get and Decrypt a message
 Bob will use get_file.sh to retrieve and decrypt the file from Alice. \
-This script will take the name of the sender as the first arg and the plaintext file to create as the second. \
+This script will take the name of the sender as the first argument and the plaintext file to create as the second. \
 The CipherText Token that was generated in Step 3 by the sender will be provided as an ENV variable. \
 After download, it will validate that the encrypted file was sent by Alice. \
 If true, it will decrypt the message. \
@@ -114,7 +114,7 @@ While the above is great for point-to-point communications, you may want to be a
 Symmetric encryption with a set of shared secret keys is a great way to mass-distribute encrypted files.
 There are many ways to generate key files, but in this example we are going to use keygen from CHAOSgen.
 This command will generate 1000 binary keys of 1000 random bytes each.
-You can use the methods described above to distribute a tarball of keys that will available for future encrypted communications.
+You can use the methods described above to distribute a tarball of keys that will be available for future encrypted communications.
 These keys will be fed to the scripts sym_encrypt.sh and sym_decrypt.sh to facilitate the symmetric encryption operations.
 ```
 mkdir keys
