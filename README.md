@@ -1,5 +1,4 @@
-[![Build Status](https://travis-ci.com/Fullaxx/sepulcher.svg?branch=master)](https://travis-ci.com/Fullaxx/sepulcher)
-# Sepulcher
+# Sepulcher  [![Actions Status](https://github.com/Fullaxx/sepulcher/workflows/CI/badge.svg)](https://github.com/Fullaxx/sepulcher/actions)
 A docker tomb for your encrypted messages built from
 * [OpenSSL](https://www.openssl.org/)
 * [webstore](https://github.com/Fullaxx/webstore)
