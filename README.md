@@ -1,4 +1,4 @@
-# Sepulcher  [![Actions Status](https://github.com/Fullaxx/sepulcher/workflows/CI/badge.svg)](https://github.com/Fullaxx/sepulcher/actions)
+# Sepulcher [![Actions Status](https://github.com/Fullaxx/sepulcher/workflows/CI/badge.svg)](https://github.com/Fullaxx/sepulcher/actions)
 A docker tomb for your encrypted messages built from
 * [OpenSSL](https://www.openssl.org/)
 * [webstore](https://github.com/Fullaxx/webstore)
